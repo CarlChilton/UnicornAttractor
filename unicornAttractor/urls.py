@@ -18,10 +18,12 @@ from django.contrib import admin
 from dashboard.views import index
 from bugs.views import bugs
 from bugs import urls as bugs_urls
+from accounts.views import accounts
+from accounts import urls as accounts_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', index, name="index"),
     url(r'^bugs/', include(bugs_urls)),
-    
+    url(r'^accounts/', include(accounts_urls)),
 ]
