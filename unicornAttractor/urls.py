@@ -16,14 +16,15 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from dashboard.views import index
-from bugs.views import bugs
 from bugs import urls as bugs_urls
-from accounts.views import accounts
 from accounts import urls as accounts_urls
+from features import urls as features_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', index, name="index"),
-    url(r'^bugs/', include(bugs_urls)),
-    url(r'^accounts/', include(accounts_urls)),
+    url(r'^bugs', include(bugs_urls)),
+    url(r'^features', include(features_urls)),
+    url(r'^accounts', include(accounts_urls)),
+    
 ]
