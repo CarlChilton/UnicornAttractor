@@ -22,7 +22,7 @@ class Comment(models.Model):
     bugId = models.IntegerField()
     featureId = models.IntegerField()
     contents = models.TextField()
+    user = models.TextField(default="unknown")
     created_date = models.DateTimeField(auto_now_add=True)
-    
     def __unicode__(self):
         return self.title

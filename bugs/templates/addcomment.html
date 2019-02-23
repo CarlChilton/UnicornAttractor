@@ -1,0 +1,14 @@
+{% extends 'bugs.html' %}
+{% load bootstrap_tags %}
+{% block comment %}
+    <form method="POST" encytpe="multipart/form-data">
+        {% csrf_token %}
+        {{ form | as_bootstrap }}
+        <div class="col-sm-10">
+            <textarea class="form-control"></textarea>        
+        </div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-info">Add Comment</button>        
+        </div>
+    </form>
+{% endblock %}

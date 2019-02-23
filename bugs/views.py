@@ -1,17 +1,23 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils import timezone
-from .models import Bug
-from .forms import AddBugForm
+from .models import Bug, Comment
+from .forms import AddBugForm, AddBugCommentForm
 
 # Create your views here.
 def bugs(request):
-    bugs = Bug.objects.filter(created_date__lte=timezone.now()).order_by('-created_date')
+    bugs = Bug.objects.order_by('-upvotes')
     return render(request, "bugs.html", {'bugs': bugs})
 
 def bug_detail(request, pk):
     bug = get_object_or_404(Bug, pk=pk)
     bug.save()
     return render(request, "bugs.html", {'bug': bug})
+
+def upvote_bug(request, pk):
+    bug = get_object_or_404(Bug, pk=pk)
+    bug.upvotes += 1
+    bug.save()
+    return redirect(reverse('bugs'))
 
 def create_or_edit_bug(request, pk=None):
     """
@@ -28,3 +34,41 @@ def create_or_edit_bug(request, pk=None):
     else:
         form = AddBugForm(instance=bug)
     return render(request, 'addbug.html', {'form': form})
+    
+def add_comment(request, pk):
+    form = AddBugCommentForm(request.POST)
+    if request.method == "POST":
+        form = AddBugCommentForm(request.POST)
+        form.contents = request.POST.get('contents')
+        form.user = request.POST.get('user')
+        form.bugId = pk
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('bugs'))    
+    
+    return redirect(reverse('bugs'))
+    # form.bugId = pk
+    # form.user = user
+    # if form.is_valid():
+    #     form.save()
+        
+    
+        
+    
+    # comment = get_object_or_404(Comment)
+    # comment.bugId = pk
+    # # comment.contents = request.contents
+    # comment.save()
+    
+    # return redirect(bugs)
+        # .save()
+        # return redirect(bugs)
+        
+        
+        # if form.is_valid():
+        
+    # # else:
+    #     form = AddBugCommentForm(instance=bug)
+    
+    
+    

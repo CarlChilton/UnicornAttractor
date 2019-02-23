@@ -14,37 +14,59 @@
             {% endif %}
         </div>
     </div>
-    
-    {% for bug in bugs %}
-        <div class="row" id="bugsContainer">
-            <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            
-                        
-                        <div class="col-xs-12 col-sm-8">
-                            <h3>{{ bug.title }}</h3>
-                            <p>{{ bug.description|truncatewords:30 }}</p>    
-                        </div>
-                        <div class="bugInteractionContainer col-xs-12 col-sm-4">
-                            {% if user.is_authenticated %}
-                                <div class="voteContainer">
-                                    <i class="fas fa-arrow-up"></i>  <i class="fas fa-arrow-down"></i>    
+    <div class="row" id="bugsContainer">
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+            <div class="panel-group" id="bugsGroup">
+                    {% for bug in bugs %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-8">
+                                        <h3>{{ bug.title }}</h3>
+                                        <p>{{ bug.description|truncatewords:30 }}</p>    
+                                    </div>
+                                    <div class="bugInteractionContainer col-xs-12 col-sm-4">
+                                        {% if user.is_authenticated %}
+                                            <div class="voteContainer">
+                                                <a href="{% url 'upvote_bug' bug.id %}"><i class="fas fa-arrow-up"> </i></a>
+                                                <span>{{ bug.upvotes }} </span>
+                                                <i class="fas fa-arrow-down"> </i>    
+                                            </div>
+                                            <a href="#{{ bug.id }}" data-toggle="collapse" class="addComment btn btn-default">Add a comment</a>    
+                                        {% endif %}
+                                        <!--{% url 'bug_detail' bug.id %}-->
+                                    </div>
                                 </div>
-                                <a href="{% url 'bug_detail' bug.id %}" class="addComment btn btn-default">Add a comment</a>    
-                            {% endif %}
+                            </div>
+                            <div class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <p>We will have comments in here. </p>    
+                                    <div class="panel panel-default">
+                                        <div class="panel-collapse collapse" id="{{ bug.id }}">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <form action="{% url 'add_comment' bug.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <div class="col-sm-10">
+                                                            <input type="text" name="contents" class="form-control"/>
+                                                            <input type="text" name="user" class="hidden" value="{{ user.get_username }}"/>
+                                                            <input type="text" name="bugId" class="hidden" value="{{ bug.id }}"/>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <button type="submit" class="btn btn-info">Add Comment</button>        
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer"><p><span class="boldtext">Created:</span>{{ bug.created_date }}</p></div>
                         </div>
-                        </div>
-                    </div>
-                    <div class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <p>We will have comments in here. </p>    
-                        </div>
-                    </div>
-                    <div class="panel-footer"><p><span class="boldtext">Created:</span>{{ bug.created_date }}</p></div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    {% endfor %}
+    
 {% endblock %}
