@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <title>Unicorn Attractor</title>
+    <title>{% block page_title %}{% endblock %}</title>
 </head>
 <body>
     <header>
@@ -22,11 +22,11 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="nav navbar-nav navbar-right" id="">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Bugs</a></li>
+                        <li class="active"><a href="/">Home</a></li>
+                        <li><a href="{% url 'bugs' %}">Bugs</a></li>
                         <li><a href="#">Features</a></li>
                         <li><a href="#">Donate</a></li>
-                        <li class=""></li>
+                        <!--<li class="fas fa-grip-lines-vertical"></li>-->
                         <li><a href="#"><i class="fas fa-user-ninja"></i> Register</a></li>
                         <li><a href="#"><i class="fas fa-sign-in-alt"></i> Login</a></li>
                     </ul>    
