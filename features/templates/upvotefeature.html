@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load bootstrap_tags %}
+{% block content %}
+<form id="paymentForm" action="{% url 'payment' feature.id %}" method="post">
+    {% csrf_token %}
+    <h3>Upvote a feature</h3>
+    <p>If you wish to upvote the following feature. Please pay £5.00 and the feature will be pushed up the list. 
+    You may promote a feature as many times as you wish.</p>
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-12 col-sm-8">
+                    <h3>{{ feature.title }} - {{ feature.status }}</h3>
+                    <span>{{ feature.description|truncatewords:30 }}</span>    
+                </div>
+                <div class="featureInteractionContainer col-xs-12 col-sm-4">
+                    <div class="voteContainer">
+                        <div class="totalVotes">{{ feature.upvotes }} </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <span class="boldtext">Created: </span>{{ feature.created_date }}
+        </div>
+    </div>
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="{{ key }}"
+        data-description="Pay to upvote a feature"
+        data-amount="500"
+        currency='gbp'
+        data-locale="auto">
+    </script>
+</form>
+{% endblock %}

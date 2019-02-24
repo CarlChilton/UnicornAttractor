@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load bootstrap_tags %}
+{% block content %}
+    <div class="alert alert-success">
+        <h3>Thanks, you're <strong>£5.00</strong> has been received!</h3>
+    </div>
+    <h3>The following feature has been upvoted!</h3>
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-12 col-sm-8">
+                    <h3>{{ feature.title }} - {{ feature.status }}</h3>
+                    <span>{{ feature.description|truncatewords:30 }}</span>    
+                </div>
+                <div class="featureInteractionContainer col-xs-12 col-sm-4">
+                    <div class="voteContainer">
+                        <div class="totalVotes">{{ feature.upvotes }} </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <span class="boldtext">Created: </span>{{ feature.created_date }}
+        </div>
+    </div>
+    <a href="{% url 'features' %}" class="btn btn-info">Return to the features page</a>
+    
+    
+{% endblock %}
+

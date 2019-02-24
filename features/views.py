@@ -1,7 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
+import os
 from django.utils import timezone
 from .models import Feature, Comment
 from .forms import AddFeatureForm, AddFeatureCommentForm
+from django.conf import settings
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY.replace("'", "")
 
 # Create your views here.
 def features(request):
@@ -9,13 +14,25 @@ def features(request):
     comments = Comment.objects.order_by('-created_date')
     return render(request, "features.html", {'features': features, 'comments': comments})
     
-
 def upvote_feature(request, pk):
+    feature = get_object_or_404(Feature, pk=pk)
+    key = settings.STRIPE_PUBLISHABLE_KEY
+    return render(request, "upvotefeature.html", {'key': key, 'feature': feature})
+    
+def payment(request, pk):
     feature = get_object_or_404(Feature, pk=pk)
     feature.upvotes += 1
     feature.save()
-    return redirect(reverse('features'))
-    
+    if request.method == 'POST':
+        payment = stripe.Charge.create(
+            amount=500,
+            currency='gbp',
+            description='Payment for a feature upvote',
+            source=request.POST['stripeToken']
+        )
+        return render(request, 'payment.html', {'feature': feature})
+
+
 
 def create_or_edit_feature(request, pk=None):
     feature = get_object_or_404(Feature, pk=pk) if pk else None
@@ -38,3 +55,6 @@ def add_comment(request, pk):
             form.save()
             return redirect(reverse('features'))    
     return redirect(reverse('features'))
+
+
+    
