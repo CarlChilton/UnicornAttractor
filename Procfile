@@ -1,1 +1,1 @@
-web: gunicorn unicornAttractor.wsgi:application
+web: gunicorn unicornAttractor.wsgi:application collectstatic --noinput; bin/gunicorn_django --workers=4 --bind=$IP:$PORT unicornAttractor/settings.py 
