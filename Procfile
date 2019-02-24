@@ -1,1 +1,1 @@
-web: gunicorn unicornAttractor.wsgi:application collectstatic --noinput
+web: gunicorn unicornAttractor.wsgi:application
