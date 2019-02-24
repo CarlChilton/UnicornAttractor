@@ -24,9 +24,9 @@ from dashboard import urls as dashboard_urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', index, name="index"),
-    url(r'^bugs/', include(bugs_urls)),
-    url(r'^features/', include(features_urls)),
-    url(r'^accounts/', include(accounts_urls)),
-    url(r'^dashboard/', include(dashboard_urls)),
+    url(r'^bugs', include(bugs_urls)),
+    url(r'^features', include(features_urls)),
+    url(r'^accounts', include(accounts_urls)),
+    url(r'^dashboard', include(dashboard_urls)),
     
 ]
