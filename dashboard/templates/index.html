@@ -1,7 +1,142 @@
 {% extends 'base.html' %}
-
+{% load staticfiles %}
 {% block page_title %} Unicorn Attractor - Dashboard {% endblock %}
 
 {% block homenav %} class="active" {% endblock %}
 
-{% block content %} THIS WILL BE A DASHBOARD {% endblock %}
+{% block content %} 
+
+<div class="col-xs-12 col-sm-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="chartHeader">Total figures to date</h4>        
+        </div>
+        <div class="panel-body chartContainer">
+            <svg class="bar-chart"></svg>        
+            <div id="personalBarBugs"></div>
+            <div id="personalBarFeatures"></div>
+            <div id="bugsFigure"></div>
+            <div id="featuresFigure"></div>
+        </div>
+        <div class="panel-footer">
+            <div class="col-xs-6">
+                <h4 class="chartLabel">Bugs</h4>
+            </div>
+            <div class="col-xs-6">
+                <h4 class="chartLabel">Features</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-8">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="chartHeader">Recently completed bugs/fixes</h4>        
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 dashboardPanel">
+                    <h5>Bugs</h5>
+                    {% for bug in bugs %}
+                        {% if bug.status == "done" %}
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <div class="col-xs-12">
+                                        {{ bug.title }}
+                                    </div>
+                                    <div class="col-xs-12">
+                                        {{ bug.completed_date }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}    
+                </div>
+                <div class="col-xs-12 col-sm-6 dashboardPanel">
+                    <h5>Features</h5>
+                    {% for feature in features %}
+                        {% if feature.status == "done" %}
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="col-xs-12">
+                                        {{ feature.title }}
+                                    </div>
+                                    <div class="col-xs-12">
+                                        {{ feature.completed_date }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://d3js.org/d3.v4.js"></script>
+<script>
+    
+var totalBugs;
+var totalFeatures;
+
+d3.json("{% url 'bugsByMonth' %}", function(error, data) {
+    totalBugs = data.length;
+    d3.json("{% url 'featuresByMonth' %}", function(error, data) {
+        totalFeatures = data.length;
+        var dataset = [totalBugs, totalFeatures];
+        var svgWidth = 500, svgHeight = 300, barPadding = 5;
+        var barWidth = svgWidth / dataset.length;
+        var svg = d3.select('svg')
+            .attr("width", svgWidth)
+            .attr("height", svgHeight);
+        
+        var xScale = d3.scaleLinear()
+            .domain([0, d3.max(data)])
+            .range([0, svgWidth]);
+        
+        var yScale = d3.scaleLinear()
+            .domain([0, d3.max(dataset)])
+            .range([0, svgHeight - 30]);
+        
+        var barChart = svg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("y", function(d) {
+                return svgHeight - yScale(d) 
+            })
+            .attr("height", function(d) { 
+                return yScale(d); 
+            })
+            .attr("width", barWidth - barPadding)
+            .attr("class", "bar")
+            .attr("transform", function (d, i) {
+                var translate = [barWidth * i, 0]; 
+                return "translate("+ translate +")";
+            });
+        
+        if (totalBugs > totalFeatures) {
+            document.getElementById("personalBarBugs").style.height = "90%";    
+            let percentage = (totalFeatures / totalBugs) * 90
+            document.getElementById("personalBarFeatures").style.height = percentage + "%";    
+        } else {
+            document.getElementById("personalBarFeatures").style.height = "90%";    
+            let percentage = (totalBugs / totalFeatures) * 90
+            document.getElementById("personalBarBugs").style.height = percentage + "%";    
+        }
+
+        document.getElementById("bugsFigure").innerHTML = totalBugs;
+        document.getElementById("featuresFigure").innerHTML = totalFeatures;
+        
+            
+    });
+});
+    
+$(window).on("load", function() {
+    
+    
+}); 
+</script>
+
+{% endblock %}

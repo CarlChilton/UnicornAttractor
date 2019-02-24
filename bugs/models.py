@@ -6,6 +6,7 @@ class Bug(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
+    completed_date = models.DateTimeField()
     upvotes = models.IntegerField(default=0)
     status = models.CharField(max_length=20, default="To do")
     def __unicode__(self):

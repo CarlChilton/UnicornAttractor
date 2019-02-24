@@ -65,6 +65,10 @@ h3 {
 #bugsContainer, #featuresContainer {
     margin-top: 20px;
 }
+.buttonForm {
+    display: inline-block;
+    margin-right: 10px;
+}
 .bugInteractionContainer, .featureInteractionContainer {
     height: 100%;
     display: flex;
@@ -86,10 +90,79 @@ h3 {
     align-items: center;
     justify-content: center;
 }
+.commentBody, .commentPanel {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+.openComment {
+    float: right;
+}
 
 /* Payments */
 .stripe-button-el {
     width: 60%;
     margin-left: 20%;
     margin-right: 20%;
+}
+
+/* Dashboard */
+.panel-heading {
+    overflow: auto;
+}
+.bar {
+    fill: transparent;
+    width: 49%;
+}
+.bar-chart {
+    width: 100%;
+}
+.bar-chart text {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    fill: white;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.bar-chart text {
+    /*transform: translateX(-46%);*/
+}
+.chartLabel, .chartHeader {
+    text-align: center;
+}
+.chartContainer {
+    position: relative;
+}
+#bugsFigure {
+    z-index: 2;
+    font-size: 20;
+    bottom: 30px;
+    left: 25%;
+    position: absolute;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+}
+#featuresFigure {
+    z-index: 2;
+    font-size: 20;
+    bottom: 30px;
+    right: 26%;
+    position: absolute;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+}
+#personalBarBugs {
+    position: absolute;
+    left: 5%;
+    bottom: 10px;
+    width: 43%;
+    background-color: orange;
+}
+#personalBarFeatures {
+    position: absolute;
+    right: 5%;
+    width: 43%;
+    background-color: green;
+    bottom: 10px;
 }

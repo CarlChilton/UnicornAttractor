@@ -27,11 +27,33 @@
                                         <span>{{ bug.description|truncatewords:30 }}</span>    
                                     </div>
                                     <div class="bugInteractionContainer col-xs-12 col-sm-4">
-                                        {% if user.is_authenticated %}
-                                            <div class="voteContainer">
-                                                <a href="{% url 'upvote_bug' bug.id %}" class="btn btn-info">Upvote <i class="fas fa-arrow-up"></i></a>
-                                                <div class="totalVotes">{{ bug.upvotes }} </div>
-                                            </div>
+                                        <div class="form-group">
+                                            {% if user.get_username == "admin" %}
+                                                {% if bug.status != "doing" %} 
+                                                    {% if bug.status != "done" %}
+                                                    <form class="buttonForm" action="{% url 'mark_doing_bug' bug.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="status" class="hidden" value="doing">
+                                                        <button class="actionButton btn btn-primary" type="submit">Doing</button>    
+                                                    </form>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if bug.status != "done" %}
+                                                    <form class="buttonForm" action="{% url 'mark_done_bug' bug.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="status" class="hidden" value="done">
+                                                        <button class="actionButton btn btn-success" type="submit">Done</button>    
+                                                    </form>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        {% if user.get_username != "admin" %}
+                                            {% if user.is_authenticated %}
+                                                <div class="voteContainer">
+                                                    <a href="{% url 'upvote_bug' bug.id %}" class="btn btn-info">Upvote <i class="fas fa-arrow-up"></i></a>
+                                                    <div class="totalVotes">{{ bug.upvotes }} </div>
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -53,19 +75,19 @@
                                             {% endif %}
                                         {% endfor %}
                                     </div>
-                                    <div class="panel panel-default">
+                                    <div class="panel commentPanel">
                                         <div class="panel-collapse collapse" id="{{ bug.id }}">
-                                            <div class="panel-body">
+                                            <div class="panel-body commentBody">
                                                 <div class="row">
                                                     <form action="{% url 'add_comment' bug.id %}" method="POST">
                                                         {% csrf_token %}
-                                                        <div class="col-sm-10">
+                                                        <div class="col-sm-8 col-md-10">
                                                             <input type="text" name="contents" class="form-control"/>
                                                             <input type="text" name="user" class="hidden" value="{{ user.get_username }}"/>
                                                             <input type="text" name="bug" class="hidden" value="{{ bug.id }}"/>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="submit" class="btn btn-info">Add Comment</button>        
+                                                        <div class="col-sm-4 col-md-2">
+                                                            <button type="submit" class="openComment btn btn-info">Add Comment</button>        
                                                         </div>
                                                     </form>
                                                 </div>

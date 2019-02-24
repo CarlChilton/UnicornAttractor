@@ -5,6 +5,7 @@ from .models import Feature, Comment
 from .forms import AddFeatureForm, AddFeatureCommentForm
 from django.conf import settings
 import stripe
+import datetime
 
 stripe.api_key = settings.STRIPE_SECRET_KEY.replace("'", "")
 
@@ -56,5 +57,15 @@ def add_comment(request, pk):
             return redirect(reverse('features'))    
     return redirect(reverse('features'))
 
-
+def mark_done_feature(request, pk):
+    feature = get_object_or_404(Feature, pk=pk)
+    feature.status = request.POST.get("status")
+    feature.completed_date = datetime.datetime.now()
+    feature.save()
+    return redirect(reverse('features'))
     
+def mark_doing_feature(request, pk):
+    feature = get_object_or_404(Feature, pk=pk)
+    feature.status = request.POST.get("status")
+    feature.save()
+    return redirect(reverse('features'))

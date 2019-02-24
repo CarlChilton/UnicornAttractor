@@ -28,12 +28,34 @@
                                         <span>{{ feature.description|truncatewords:30 }}</span>    
                                     </div>
                                     <div class="featureInteractionContainer col-xs-12 col-sm-4">
-                                        {% if user.is_authenticated %}
-                                            <div class="voteContainer">
-                                                <a href="{% url 'upvote_feature' feature.id %}" class="btn btn-info">Upvote <i class="fas fa-arrow-up"></i></a>
-                                                <div class="totalVotes">{{ feature.upvotes }} </div>
-                                            </div>
-                                        {% endif %}
+                                        <div class="form-group">
+                                        {% if user.get_username == "admin" %}
+                                            {% if feature.status != "doing" %} 
+                                                {% if feature.status != "done" %}
+                                                    <form class="buttonForm" action="{% url 'mark_doing_feature' feature.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="status" class="hidden" value="doing">
+                                                        <button class="actionButton btn btn-primary" type="submit">Doing</button>    
+                                                    </form>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if feature.status != "done" %}
+                                                    <form class="buttonForm" action="{% url 'mark_done_feature' feature.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="status" class="hidden" value="done">
+                                                        <button class="actionButton btn btn-success" type="submit">Done</button>    
+                                                    </form>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if user.get_username != "admin" %}
+                                                {% if user.is_authenticated %}
+                                                    <div class="voteContainer">
+                                                        <a href="{% url 'upvote_feature' feature.id %}" class="btn btn-info">Upvote <i class="fas fa-arrow-up"></i></a>
+                                                        <div class="totalVotes">{{ feature.upvotes }} </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -54,9 +76,9 @@
                                             {% endif %}
                                         {% endfor %}
                                     </div>
-                                    <div class="panel panel-default">
+                                    <div class="panel panel-default commentPanel">
                                         <div class="panel-collapse collapse" id="{{ feature.id }}">
-                                            <div class="panel-body">
+                                            <div class="panel-body commentBody">
                                                 <div class="row">
                                                     <form action="{% url 'add_comment' feature.id %}" method="POST">
                                                         {% csrf_token %}

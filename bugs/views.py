@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils import timezone
 from .models import Bug, Comment
 from .forms import AddBugForm, AddBugCommentForm
+import datetime
 
 # Create your views here.
 def bugs(request):
@@ -14,7 +15,6 @@ def upvote_bug(request, pk):
     bug.upvotes += 1
     bug.save()
     return redirect(reverse('bugs'))
-    
 
 def create_or_edit_bug(request, pk=None):
     """
@@ -44,6 +44,16 @@ def add_comment(request, pk):
             return redirect(reverse('bugs'))    
     return redirect(reverse('bugs'))
     
+def mark_done_bug(request, pk):
+    bug = get_object_or_404(Bug, pk=pk)
+    bug.status = request.POST.get("status")
+    bug.completed_date = datetime.datetime.now()
+    bug.save()
+    return redirect(reverse('bugs'))
     
-    
+def mark_doing_bug(request, pk):
+    bug = get_object_or_404(Bug, pk=pk)
+    bug.status = request.POST.get("status")
+    bug.save()
+    return redirect(reverse('bugs'))
     
