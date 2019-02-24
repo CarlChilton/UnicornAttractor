@@ -7,6 +7,7 @@
 {% block content %} 
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+            <h3 class="pageTitle">BUGS</h3>
             {% if user.is_authenticated %}
                 <a href="{% url 'new_bug' %}" class="addBug btn btn-info">Add a bug</a>    
             {% else %}
@@ -32,7 +33,6 @@
                                                 <div class="totalVotes">{{ bug.upvotes }} </div>
                                             </div>
                                         {% endif %}
-                                        <!--{% url 'bug_detail' bug.id %}-->
                                     </div>
                                 </div>
                             </div>

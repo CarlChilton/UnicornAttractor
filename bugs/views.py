@@ -9,11 +9,6 @@ def bugs(request):
     comments = Comment.objects.order_by('-created_date')
     return render(request, "bugs.html", {'bugs': bugs, 'comments': comments})
 
-def bug_detail(request, pk):
-    bug = get_object_or_404(Bug, pk=pk)
-    bug.save()
-    return render(request, "bugs.html", {'bug': bug})
-
 def upvote_bug(request, pk):
     bug = get_object_or_404(Bug, pk=pk)
     bug.upvotes += 1

@@ -14,7 +14,6 @@ class Bug(models.Model):
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     bug = models.ForeignKey(Bug, related_name="bug")
-    featureId = models.IntegerField()
     contents = models.TextField()
     user = models.TextField(default="unknown")
     created_date = models.DateTimeField(auto_now_add=True)

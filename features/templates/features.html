@@ -4,4 +4,87 @@
 
 {% block featuresnav %} class="active" {% endblock %}
 
-{% block content %} THIS WILL BE A FEATURES PAGE {% endblock %}
+{% block content %} 
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+            <h3 class="pageTitle">FEATURES   </h3>
+            <span>Please note, features can only be upvote for a monetary value</span>
+            {% if user.is_authenticated %}
+                <a href="{% url 'new_feature' %}" class="addFeature btn btn-info">Request a feature</a>    
+            {% else %}
+                <p>You must be logged in before you can add features, comment or vote.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row" id="featuresContainer">
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            <div class="panel-group" id="featuresGroup">
+                    {% for feature in features %}
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-8">
+                                        <h3>{{ feature.title }} - {{ feature.status }}</h3>
+                                        <span>{{ feature.description|truncatewords:30 }}</span>    
+                                    </div>
+                                    <div class="featureInteractionContainer col-xs-12 col-sm-4">
+                                        {% if user.is_authenticated %}
+                                            <div class="voteContainer">
+                                                <a href="{% url 'upvote_feature' feature.id %}" class="btn btn-info">Upvote <i class="fas fa-arrow-up"></i></a>
+                                                <div class="totalVotes">{{ feature.upvotes }} </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        {% for comment in comments %}
+                                            {% if comment.feature_id == feature.id %}
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <p><strong>{{ comment.user }}</strong></p>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-7">
+                                                    <p>{{ comment.contents }}</p>    
+                                                </div>
+                                                <div class="col-xs-12 createdDate">
+                                                    <p>{{ comment.created_date }}</p>    
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-collapse collapse" id="{{ feature.id }}">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <form action="{% url 'add_comment' feature.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <div class="col-sm-10">
+                                                            <input type="text" name="contents" class="form-control"/>
+                                                            <input type="text" name="user" class="hidden" value="{{ user.get_username }}"/>
+                                                            <input type="text" name="feature" class="hidden" value="{{ feature.id }}"/>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <button type="submit" class="btn btn-info">Add Comment</button>        
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <span class="boldtext">Created: </span>{{ feature.created_date }}
+                                {% if user.is_authenticated %}
+                                    <a href="#{{ feature.id }}" data-toggle="collapse" class="addComment btn btn-default">Add a comment</a>    
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    
+{% endblock %}

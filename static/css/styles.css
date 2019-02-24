@@ -3,6 +3,9 @@
 body {
     font-family: Poppins;
 }
+#navbar {
+    overflow: hidden;
+}
 .nav>li>a.logoutLink {
     position: absolute;
     right: -10px;
@@ -39,27 +42,30 @@ body {
 #loginForm #id_username {
     background-color: white;
 }
-
-/* bugs page */
+.pageTitle {
+    display: inline-block;
+    color: #464646;
+}
+/* bugs and features pages */
 .addComment {
     float: right;
 }
-.addBug {
+.addBug, .addFeature {
     float:right;
 }
 .panel-footer {
     overflow: auto;
 }
-.panel-group .panel.panel-info {
+.panel-group .panel.panel-info, .panel-group .panel.panel-warning {
     margin-bottom: 20px;
 }
 h3 {
     margin-top: 0;
 }
-#bugsContainer {
+#bugsContainer, #featuresContainer {
     margin-top: 20px;
 }
-.bugInteractionContainer {
+.bugInteractionContainer, .featureInteractionContainer {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -73,11 +79,8 @@ h3 {
 .totalVotes {
     background-color: white;
     border: solid 2px blue;
-    /*font-size: 18px;*/
-    /*font-weight: bold;*/
     width: 34px;
     height: 34px;
-    /*margin-top: 2px;*/
     border-radius: 4px;
     display: inline-flex;
     align-items: center;
