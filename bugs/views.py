@@ -6,7 +6,8 @@ from .forms import AddBugForm, AddBugCommentForm
 # Create your views here.
 def bugs(request):
     bugs = Bug.objects.order_by('-upvotes')
-    return render(request, "bugs.html", {'bugs': bugs})
+    comments = Comment.objects.order_by('-created_date')
+    return render(request, "bugs.html", {'bugs': bugs, 'comments': comments})
 
 def bug_detail(request, pk):
     bug = get_object_or_404(Bug, pk=pk)
@@ -18,6 +19,7 @@ def upvote_bug(request, pk):
     bug.upvotes += 1
     bug.save()
     return redirect(reverse('bugs'))
+    
 
 def create_or_edit_bug(request, pk=None):
     """
@@ -41,34 +43,12 @@ def add_comment(request, pk):
         form = AddBugCommentForm(request.POST)
         form.contents = request.POST.get('contents')
         form.user = request.POST.get('user')
-        form.bugId = pk
+        # form.bug_id = pk
         if form.is_valid():
             form.save()
             return redirect(reverse('bugs'))    
-    
     return redirect(reverse('bugs'))
-    # form.bugId = pk
-    # form.user = user
-    # if form.is_valid():
-    #     form.save()
-        
     
-        
-    
-    # comment = get_object_or_404(Comment)
-    # comment.bugId = pk
-    # # comment.contents = request.contents
-    # comment.save()
-    
-    # return redirect(bugs)
-        # .save()
-        # return redirect(bugs)
-        
-        
-        # if form.is_valid():
-        
-    # # else:
-    #     form = AddBugCommentForm(instance=bug)
     
     
     

@@ -9,4 +9,5 @@ class AddBugForm(forms.ModelForm):
 class AddBugCommentForm(forms.ModelForm):
     class Meta: 
         model = Comment
-        fields = ('contents', 'user', 'bugId')
+        fields = ('contents', 'user', 'bug')
+        
