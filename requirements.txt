@@ -7,7 +7,7 @@ httplib2==0.8
 keyring==3.5
 requests==2.2.1
 urllib3==1.7.1
-Django==1.11
+Django==1.11.23
 gunicorn==19.9.0
 dj-database-url==0.5.0
 Pillow==5.4.1
